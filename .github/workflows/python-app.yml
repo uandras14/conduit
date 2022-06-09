@@ -1,5 +1,4 @@
-Vizsgaremek_Conduit
-
+name:Vizsgaremek_Conduit
 on:
   push:
     branches: 
