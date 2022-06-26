@@ -10,8 +10,3 @@ user_negative = {
     "password": "qwertzuI1"
 }
 
-# article = {
-#     "title": "cím3",
-#     "about": "valami3",
-#     "body": "idézet szövege3",
-#     "tag": "valami3"
