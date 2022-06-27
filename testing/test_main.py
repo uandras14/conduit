@@ -140,7 +140,7 @@ class TestConduit(object):
             assert len(pages_list_new) == len(pages_list) + counter
 
     # TC8 - Meglévő adat módosítás
-    def test_data_modify(self):
+    def ttest_data_modify(self):
         login(self.browser)
         letters = string.ascii_lowercase
         title = ''.join(random.choice(letters) for i in range(5))
@@ -163,8 +163,31 @@ class TestConduit(object):
         time.sleep(2)
         mod_post = self.browser.find_element_by_xpath(f'//h1[text()="{title}"]')
         assert mod_post.is_displayed
+
     # TC9 - Adat vagy adatok törlése
+    def ttest_data_delete(self):
+        login(self.browser)
+        pages_list = len(self.browser.find_elements_by_xpath('//div[@class="article-preview"]'))
+        profile_page = self.browser.find_element_by_xpath('//*[@id="app"]/nav/div/ul/li[4]/a')
+        profile_page.click()
+        time.sleep(3)
+        self.browser.refresh()
+        time.sleep(3)
+        first_post = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
+        first_post[0].click()
+        delete_btn = self.browser.find_element_by_xpath('//button[@class="btn btn-outline-danger btn-sm"]')
+        delete_btn.click()
+        time.sleep(2)
+        pages_list_new = len(self.browser.find_elements_by_xpath('//div[@class="article-preview"]'))
+        assert pages_list_new == pages_list - 1
 
     # TC10 - Adatok lementése felületről
 
     # TC11 - Kijelentkezés
+    def test_sign_out(self):
+        login(self.browser)
+        btn_signout_1=self.browser.find_element_by_xpath('//a[@active-class="active"]')
+        btn_signout=self.browser.find_element_by_xpath('//a[@active-class="active"]').text
+        btn_signout_1.click()
+        time.sleep(2)
+        assert not btn_signout.
