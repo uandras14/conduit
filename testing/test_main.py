@@ -31,14 +31,12 @@ class TestConduit(object):
         registration(self.browser, user_negative["name"], user_negative["email"], user_negative["password"])
         failed_result = self.browser.find_element_by_xpath('//div[@class="swal-title"]')
         error_type = self.browser.find_element_by_xpath('//div[@class="swal-text"]')
-        try:
-            assert failed_result.text == "Registration failed!" and error_type.text == "Email must be a valid email. "
-            print("A vártnak megfelelő hibaüzenet fogad")
-        except AssertionError:
-            print("Nem megfelelő hibaüzenet")
+
+        assert failed_result.text == "Registration failed!" and error_type.text == "Email must be a valid email. "
 
     # TC2 - Bejelentkezés helyes adatokkal
     def ttest_signin_correct(self):
+        registration(self.browser, "waw", user_positive["email"], user_positive["password"])
         btn_sign_in_main = self.browser.find_elements_by_xpath('//a[@href="#/login"]')[0]
         btn_sign_in_main.click()
         email_input = self.browser.find_element_by_xpath('//input[@placeholder="Email"]')
@@ -49,23 +47,14 @@ class TestConduit(object):
         btn_sign_in.click()
         time.sleep(2)
         links = self.browser.find_elements_by_xpath('//li[@class="nav-item"]')
-        try:
-            assert len(links) == 7
-            print('Sikeres bejelentkezés')
-        except AssertionError:
-            print('Nem sikerült bejelentkezni')
+        assert len(links) == 7
 
     # TC3 - Adatkezelési nyilatkozat használata
     def ttest_cookies(self):
         cookie_msg = self.browser.find_element_by_xpath('//div[@class="cookie__bar__content"]')
-        btn_cookie_accept = self.browser.find_element_by_xpath(
-            '//button[@class="cookie__bar__buttons__button cookie__bar__buttons__button--accept"]')
+        btn_cookie_accept = self.browser.find_element_by_xpath('//button[@class="cookie__bar__buttons__button cookie__bar__buttons__button--accept"]')
         btn_cookie_accept.click()
-        try:
-            assert not cookie_msg.is_displayed()
-            print('Sikeresen kezelte az adatkezelési nyilatkozatot')
-        except AssertionError:
-            print('Az adatkezelési nyilatkozat már korábban el lett fogadva')
+        assert not cookie_msg.is_displayed()
 
     # TC4 - Adatok listázása
     def ttest_data_list(self):
@@ -74,7 +63,6 @@ class TestConduit(object):
         counter = 0
         for i in posts_on_page:
             counter = counter + 1
-
         assert counter == len(posts_on_page)
 
     # TC5 - Több oldalas lista bejárása
@@ -112,7 +100,8 @@ class TestConduit(object):
         pages_list_new = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
         assert len(pages_list_new) == len(pages_list) + 1
 
-    # TC7 - Ismételt és sorozatos adatbevitel adatforrásból
+
+# TC7 - Ismételt és sorozatos adatbevitel adatforrásból
     def ttest_data_repeat(self):
         login(self.browser)
         pages_list = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
@@ -139,8 +128,9 @@ class TestConduit(object):
             pages_list_new = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
             assert len(pages_list_new) == len(pages_list) + counter
 
-    # TC8 - Meglévő adat módosítás
-    def ttest_data_modify(self):
+
+# TC8 - Meglévő adat módosítás
+    def test_data_modify(self):
         login(self.browser)
         letters = string.ascii_lowercase
         title = ''.join(random.choice(letters) for i in range(5))
@@ -164,6 +154,7 @@ class TestConduit(object):
         mod_post = self.browser.find_element_by_xpath(f'//h1[text()="{title}"]')
         assert mod_post.is_displayed
 
+
     # TC9 - Adat vagy adatok törlése
     def ttest_data_delete(self):
         login(self.browser)
@@ -181,13 +172,13 @@ class TestConduit(object):
         pages_list_new = len(self.browser.find_elements_by_xpath('//div[@class="article-preview"]'))
         assert pages_list_new == pages_list - 1
 
-    # TC10 - Adatok lementése felületről
+# TC10 - Adatok lementése felületről
 
-    # TC11 - Kijelentkezés
-    def test_sign_out(self):
-        login(self.browser)
-        btn_signout_1=self.browser.find_element_by_xpath('//a[@active-class="active"]')
-        btn_signout=self.browser.find_element_by_xpath('//a[@active-class="active"]').text
-        btn_signout_1.click()
-        time.sleep(2)
-        assert not btn_signout.
+# # TC11 - Kijelentkezés
+# def test_sign_out(self):
+#     login(self.browser)
+#     btn_signout_1 = self.browser.find_element_by_xpath('//a[@active-class="active"]')
+#     btn_signout = self.browser.find_element_by_xpath('//a[@active-class="active"]').text
+#     btn_signout_1.click()
+#     time.sleep(2)
+#     assert not btn_signout.
