@@ -1,4 +1,5 @@
 import csv
+import os
 import random
 import string
 
@@ -35,8 +36,14 @@ class TestConduit(object):
         assert failed_result.text == "Registration failed!" and error_type.text == "Email must be a valid email. "
 
     # TC2 - Bejelentkezés helyes adatokkal
-    def ttest_signin_correct(self):
+    def test_signin_correct(self):
         registration(self.browser, "waw", user_positive["email"], user_positive["password"])
+        time.sleep(2)
+        Keys.ENTER
+        time.sleep(2)
+        btn_signout_1 = self.browser.find_element_by_xpath('//a[@active-class="active"]')
+        btn_signout_1.click()
+        time.sleep(2)
         btn_sign_in_main = self.browser.find_elements_by_xpath('//a[@href="#/login"]')[0]
         btn_sign_in_main.click()
         email_input = self.browser.find_element_by_xpath('//input[@placeholder="Email"]')
@@ -51,10 +58,11 @@ class TestConduit(object):
 
     # TC3 - Adatkezelési nyilatkozat használata
     def ttest_cookies(self):
-        cookie_msg = self.browser.find_element_by_xpath('//div[@class="cookie__bar__content"]')
-        btn_cookie_accept = self.browser.find_element_by_xpath('//button[@class="cookie__bar__buttons__button cookie__bar__buttons__button--accept"]')
+        btn_cookie_accept = self.browser.find_element_by_xpath(
+            '//button[@class="cookie__bar__buttons__button cookie__bar__buttons__button--accept"]')
         btn_cookie_accept.click()
-        assert not cookie_msg.is_displayed()
+        cookie_panel = self.browser.find_elements_by_id("cookie-policy-panel")
+        assert not len(cookie_panel) > 0
 
     # TC4 - Adatok listázása
     def ttest_data_list(self):
@@ -100,8 +108,7 @@ class TestConduit(object):
         pages_list_new = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
         assert len(pages_list_new) == len(pages_list) + 1
 
-
-# TC7 - Ismételt és sorozatos adatbevitel adatforrásból
+    # TC7 - Ismételt és sorozatos adatbevitel adatforrásból
     def ttest_data_repeat(self):
         login(self.browser)
         pages_list = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
@@ -128,9 +135,8 @@ class TestConduit(object):
             pages_list_new = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
             assert len(pages_list_new) == len(pages_list) + counter
 
-
-# TC8 - Meglévő adat módosítás
-    def test_data_modify(self):
+    # TC8 - Meglévő adat módosítás
+    def ttest_data_modify(self):
         login(self.browser)
         letters = string.ascii_lowercase
         title = ''.join(random.choice(letters) for i in range(5))
@@ -154,7 +160,6 @@ class TestConduit(object):
         mod_post = self.browser.find_element_by_xpath(f'//h1[text()="{title}"]')
         assert mod_post.is_displayed
 
-
     # TC9 - Adat vagy adatok törlése
     def ttest_data_delete(self):
         login(self.browser)
@@ -172,13 +177,28 @@ class TestConduit(object):
         pages_list_new = len(self.browser.find_elements_by_xpath('//div[@class="article-preview"]'))
         assert pages_list_new == pages_list - 1
 
-# TC10 - Adatok lementése felületről
+    # TC10 - Adatok lementése felületről
+    def ttest_data_save(self):
+        login(self.browser)
+        tag_list = []
+        for tags in self.browser.find_elements_by_xpath('//a[@class="tag-pill tag-default"]'):
+            tag_content = tags.get_attribute("innerHTML")
+            tag_list.append(tag_content)
 
-# # TC11 - Kijelentkezés
-# def test_sign_out(self):
-#     login(self.browser)
-#     btn_signout_1 = self.browser.find_element_by_xpath('//a[@active-class="active"]')
-#     btn_signout = self.browser.find_element_by_xpath('//a[@active-class="active"]').text
-#     btn_signout_1.click()
-#     time.sleep(2)
-#     assert not btn_signout.
+        tag_set = set(tag_list)
+        tag_list_new = list(tag_set)
+
+        with open("tagsfile.txt", 'w', encoding='UTF-8') as f:
+            for i in tag_list_new:
+                f.write(i)
+                f.write('\n')
+        time.sleep(1)
+        assert os.path.getsize("tagsfile.txt") != 0
+
+    # # TC11 - Kijelentkezés
+    def ttest_sign_out(self):
+        login(self.browser)
+        btn_signout_1 = self.browser.find_element_by_xpath('//a[@active-class="active"]')
+        btn_signout_1.click()
+        btn_sign_up = self.browser.find_element_by_xpath('.//a[@href="#/register"]')
+        assert btn_sign_up.is_displayed()
