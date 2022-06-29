@@ -157,7 +157,7 @@ class TestConduit(object):
         profile_page = self.browser.find_element_by_xpath('//*[@id="app"]/nav/div/ul/li[4]/a')
         profile_page.click()
         time.sleep(2)
-        profile_page.click()
+        self.browser.refresh()
         time.sleep(5)
         first_post = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
         first_post[0].click()
