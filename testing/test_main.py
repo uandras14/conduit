@@ -28,7 +28,7 @@ class TestConduit(object):
 
     # TC1 - Regisztráció helytelen adatokkal
 
-    def ttest_registration_fail(self):
+    def test_registration_fail(self):
         registration(self.browser, user_negative["name"], user_negative["email"], user_negative["password"])
         failed_result = self.browser.find_element_by_xpath('//div[@class="swal-title"]')
         error_type = self.browser.find_element_by_xpath('//div[@class="swal-text"]')
@@ -57,7 +57,7 @@ class TestConduit(object):
         assert len(links) == 7
 
     # TC3 - Adatkezelési nyilatkozat használata
-    def ttest_cookies(self):
+    def test_cookies(self):
         btn_cookie_accept = self.browser.find_element_by_xpath(
             '//button[@class="cookie__bar__buttons__button cookie__bar__buttons__button--accept"]')
         btn_cookie_accept.click()
@@ -65,7 +65,7 @@ class TestConduit(object):
         assert not len(cookie_panel) > 0
 
     # TC4 - Adatok listázása
-    def ttest_data_list(self):
+    def test_data_list(self):
         login(self.browser)
         posts_on_page = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
         counter = 0
@@ -74,7 +74,7 @@ class TestConduit(object):
         assert counter == len(posts_on_page)
 
     # TC5 - Több oldalas lista bejárása
-    def ttest_multiple_pages(self):
+    def test_multiple_pages(self):
         login(self.browser)
         counter = 0
         pages_list = self.browser.find_elements_by_xpath('//a[@class="page-link"]')
@@ -84,7 +84,7 @@ class TestConduit(object):
         assert len(pages_list) == counter
 
     # TC6 -  Új adat bevitel
-    def ttest_post_make(self):
+    def test_post_make(self):
         login(self.browser)
         letters = string.ascii_lowercase
         title = ''.join(random.choice(letters) for i in range(5))
@@ -109,7 +109,7 @@ class TestConduit(object):
         assert len(pages_list_new) == len(pages_list) + 1
 
     # TC7 - Ismételt és sorozatos adatbevitel adatforrásból
-    def ttest_data_repeat(self):
+    def test_data_repeat(self):
         login(self.browser)
         pages_list = self.browser.find_elements_by_xpath('//div[@class="article-preview"]')
         new_article = self.browser.find_element_by_xpath('//a[@href="#/editor"]')
@@ -136,7 +136,7 @@ class TestConduit(object):
             assert len(pages_list_new) == len(pages_list) + counter
 
     # TC8 - Meglévő adat módosítás
-    def ttest_data_modify(self):
+    def test_data_modify(self):
         login(self.browser)
         letters = string.ascii_lowercase
         title = ''.join(random.choice(letters) for i in range(5))
@@ -161,7 +161,7 @@ class TestConduit(object):
         assert mod_post.is_displayed
 
     # TC9 - Adat vagy adatok törlése
-    def ttest_data_delete(self):
+    def test_data_delete(self):
         login(self.browser)
         pages_list = len(self.browser.find_elements_by_xpath('//div[@class="article-preview"]'))
         profile_page = self.browser.find_element_by_xpath('//*[@id="app"]/nav/div/ul/li[4]/a')
@@ -178,7 +178,7 @@ class TestConduit(object):
         assert pages_list_new == pages_list - 1
 
     # TC10 - Adatok lementése felületről
-    def ttest_data_save(self):
+    def test_data_save(self):
         login(self.browser)
         tag_list = []
         for tags in self.browser.find_elements_by_xpath('//a[@class="tag-pill tag-default"]'):
@@ -196,7 +196,7 @@ class TestConduit(object):
         assert os.path.getsize("tagsfile.txt") != 0
 
     # # TC11 - Kijelentkezés
-    def ttest_sign_out(self):
+    def test_sign_out(self):
         login(self.browser)
         btn_signout_1 = self.browser.find_element_by_xpath('//a[@active-class="active"]')
         btn_signout_1.click()
