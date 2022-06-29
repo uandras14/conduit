@@ -25,7 +25,7 @@ class TestConduit(object):
     def teardown(self):
         self.browser.quit()
 
-    # TC1 - Regisztráció helytelen adatokkal
+    # TC1 - Regisztráció helytelen adatokkal.
 
     def test_registration_fail(self):
         registration(self.browser, user_negative["name"], user_negative["email"], user_negative["password"])
