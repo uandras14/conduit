@@ -15,8 +15,7 @@ from functions import *
 class TestConduit(object):
 
     def setup(self):
-        #browser_options = Options()
-        # browser_options.headless = True
+
         self.browser = webdriver.Chrome(ChromeDriverManager().install())
         self.browser.implicitly_wait(10)
         URL = 'http://localhost:1667/#/'
